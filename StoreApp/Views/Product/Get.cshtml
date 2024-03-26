@@ -1,7 +1,7 @@
 ﻿@model Product
 
 <h3>@Model.ProductName</h3>
-<h3>@Model.Price</h3>
+<h3>@Model.Price.ToString("C")</h3>
 
 <div class="btn-group">
     <a class="btn btn-primary" asp-controller="Home" asp-action="Index">
