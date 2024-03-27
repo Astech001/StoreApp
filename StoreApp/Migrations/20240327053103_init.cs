@@ -19,7 +19,7 @@ namespace StoreApp.Migrations
                 {
                     CategoryId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CategoryName = table.Column<string>(type: "text", nullable: true)
+                    CategoryName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,12 +32,18 @@ namespace StoreApp.Migrations
                 {
                     ProductId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProductName = table.Column<string>(type: "text", nullable: true),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false)
+                    ProductName = table.Column<string>(type: "text", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId");
                 });
 
             migrationBuilder.InsertData(
@@ -51,25 +57,32 @@ namespace StoreApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "ProductId", "Price", "ProductName" },
+                columns: new[] { "ProductId", "CategoryId", "Price", "ProductName" },
                 values: new object[,]
                 {
-                    { 1, 17000m, "Computer" },
-                    { 2, 10000m, "Klavye" },
-                    { 3, 35000m, "Monitor" },
-                    { 4, 20000m, "Deck" },
-                    { 5, 1000m, "Mouse" }
+                    { 1, 2, 17000m, "Computer" },
+                    { 2, 2, 10000m, "Klavye" },
+                    { 3, 2, 35000m, "Monitor" },
+                    { 4, 2, 20000m, "Deck" },
+                    { 5, 2, 1000m, "Mouse" },
+                    { 6, 1, 25m, "History" },
+                    { 7, 1, 45m, "Hamlet" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Categories");
         }
     }
 }
