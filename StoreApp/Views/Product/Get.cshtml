@@ -1,4 +1,15 @@
 ﻿@model Product
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center">
+            <h4 class="display-6">
+                @Model.ProductName
+            </h4>
+            <img width="100"; height="320" class="img-fluid shadow rounded-3 my-3" src="@Model?.ImageUrl" alt="@Model.ProductName"/>
+            <p class="lead text-danger">@Model.Price.ToString("C")</p>
+        </div>
+    </div>
+</div>
 
 <h3>@Model.ProductName</h3>
 <h3>@Model.Price.ToString("C")</h3>
