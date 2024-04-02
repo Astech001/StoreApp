@@ -12,7 +12,7 @@ using Repositories;
 namespace StoreApp.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240329110648_start")]
+    [Migration("20240402075652_start")]
     partial class start
     {
         /// <inheritdoc />
@@ -24,6 +24,32 @@ namespace StoreApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Entities.Models.CartLine", b =>
+                {
+                    b.Property<int>("CartLineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CartLineId"));
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CartLineId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartLine");
+                });
 
             modelBuilder.Entity("Entities.Models.Category", b =>
                 {
@@ -52,6 +78,47 @@ namespace StoreApp.Migrations
                             CategoryId = 2,
                             CategoryName = "Electronics"
                         });
+                });
+
+            modelBuilder.Entity("Entities.Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("GiftWrap")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Line1")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Line2")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Line3")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OrderedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Shipped")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Entities.Models.Product", b =>
@@ -150,6 +217,21 @@ namespace StoreApp.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entities.Models.CartLine", b =>
+                {
+                    b.HasOne("Entities.Models.Order", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Entities.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Entities.Models.Product", b =>
                 {
                     b.HasOne("Entities.Models.Category", "Category")
@@ -162,6 +244,11 @@ namespace StoreApp.Migrations
             modelBuilder.Entity("Entities.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Entities.Models.Order", b =>
+                {
+                    b.Navigation("Lines");
                 });
 #pragma warning restore 612, 618
         }
