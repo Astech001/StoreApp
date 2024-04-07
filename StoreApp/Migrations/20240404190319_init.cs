@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace StoreApp.Migrations
 {
     /// <inheritdoc />
-    public partial class start : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,7 +57,8 @@ namespace StoreApp.Migrations
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Summary = table.Column<string>(type: "text", nullable: true),
                     ImageUrl = table.Column<string>(type: "text", nullable: true),
-                    CategoryId = table.Column<int>(type: "integer", nullable: true)
+                    CategoryId = table.Column<int>(type: "integer", nullable: true),
+                    ShowCase = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,16 +107,19 @@ namespace StoreApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "ProductId", "CategoryId", "ImageUrl", "Price", "ProductName", "Summary" },
+                columns: new[] { "ProductId", "CategoryId", "ImageUrl", "Price", "ProductName", "ShowCase", "Summary" },
                 values: new object[,]
                 {
-                    { 1, 2, "/images/1.jpeg", 17000m, "Computer", "" },
-                    { 2, 2, "/images/2.jpeg", 10000m, "Klavye", "" },
-                    { 3, 2, "/images/3.jpeg", 35000m, "Monitor", "" },
-                    { 4, 2, "/images/4.jpeg", 20000m, "Deck", "" },
-                    { 5, 2, "/images/5.jpeg", 1000m, "Mouse", "" },
-                    { 6, 1, "/images/6.jpeg", 25m, "History", "" },
-                    { 7, 1, "/images/7.jpeg", 45m, "Hamlet", "" }
+                    { 1, 2, "/images/1.jpeg", 17000m, "Computer", false, "" },
+                    { 2, 2, "/images/2.jpeg", 10000m, "Klavye", false, "" },
+                    { 3, 2, "/images/3.jpeg", 35000m, "Monitor", false, "" },
+                    { 4, 2, "/images/4.jpeg", 20000m, "Deck", false, "" },
+                    { 5, 2, "/images/5.jpeg", 1000m, "Mouse", false, "" },
+                    { 6, 1, "/images/6.jpeg", 25m, "History", false, "" },
+                    { 7, 1, "/images/7.jpeg", 45m, "Hamlet", false, "" },
+                    { 8, 1, "/images/8.jpeg", 12000m, "XP-Pen", true, "" },
+                    { 9, 2, "/images/9.jpeg", 89000m, "Samsung Galaxy", true, "" },
+                    { 10, 1, "/images/10.jpeg", 12m, "Hp Mouse", true, "" }
                 });
 
             migrationBuilder.CreateIndex(
